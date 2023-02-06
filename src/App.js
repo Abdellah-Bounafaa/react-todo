@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import TodoForm from "./Components/TodoForm";
+import { Todos } from "./Components/Todos";
 
 function App() {
+  const [todos, setTodos] = useState([
+    { id: 0, task: "Go To Gym", completed: false },
+    { id: 1, task: "Read book", completed: false },
+  ]);
+  const handleComplete = (todo) => {
+    console.log(todo);
+    setTodos(
+      todos.map((t) => {
+        if (todo.id === t.id) {
+          return { ...t, completed: !t.completed };
+        }
+        return t;
+      })
+    );
+  };
+
+  const handleDelete = (id) => {
+    const findedTodo = todos.filter((todo) => todo.id !== id);
+    setTodos(findedTodo);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TodoForm todos={todos} setTodos={setTodos} />
+      <Todos
+        todos={todos}
+        handleComplete={handleComplete}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 }
